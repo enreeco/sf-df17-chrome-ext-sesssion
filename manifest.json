@@ -1,0 +1,53 @@
+{
+  "manifest_version": 2,
+  "name": "Amazing Salesforce Chrome Extension",
+  "short_name" : "Amazing Salesforce Chrome Extension",
+  "description": "This is the most amazing Salesforce Chrome Extension",
+  "version": "0.0.1",
+  "author":{
+    "name":"Enrico Murru",
+    "url":"http://enree.co"
+  },
+  "homepage_url": "http://enree.co",
+  "permissions": [
+    "tabs",
+    "storage",
+    "cookies",
+    "https://*.salesforce.com/*",
+    "https://*.force.com/*"
+  ],
+  "web_accessible_resources": ["options.html"],
+  "browser_action": {
+    "default_icon": "img/icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Amazing Salesforce Chrome Extension"
+  },
+  "icons": { "16": "img/icon.png",
+           "48": "img/icon.png",
+          "128": "img/icon.png" 
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "matches": ["https://*.force.com/*","https://*.salesforce.com/*"],
+      "all_frames":true,
+      "js": [
+        "libs/content.js"
+      ],
+      "css" : [
+        "css/content.css"
+      ]
+    }
+  ],
+  "options_page": "options.html",
+   "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K",
+        "chromeos": "Ctrl+Shift+K",
+        "linux": "Ctrl+Shift+K"
+      }
+    }
+  }
+}
