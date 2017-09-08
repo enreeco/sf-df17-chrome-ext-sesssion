@@ -40,5 +40,13 @@
       ]
     }
   ],
+  "background": {
+    "scripts": [
+      "libs/constants.js",
+      "libs/utils.js",
+      "libs/background.js"
+    ],
+    "persistent" : true
+  },
   "options_page": "options.html"
 }

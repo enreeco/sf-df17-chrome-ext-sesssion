@@ -169,28 +169,8 @@ window.$Utils = window.$Utils || (function(){
             window.location.href = url;
         },
 
-        /*
-         * Get current user's chatter data
-         */
-        getMyChatterFeeds: function(instanceUrl, accessToken, callback){
-            var url = instanceUrl
-                        +'/services/data/v'
-                        +$Constants.API_LEVEL
-                        +'/chatter/feeds/news/me/feed-elements';
-            return $.ajax({
-                url: url,
-                method: 'GET',
-                cache: true,
-                headers:{
-                    'Authorization' : 'Bearer '+accessToken,
-                },
-                success: function(result,status,xhr){
-                    return callback && callback(null, result);
-                },
-                error: function(data){
-                    return callback && callback(data);
-                },
-            });
-        },
+        getTabSessionId: function(){
+            
+        }
     };
 })();
