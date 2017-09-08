@@ -22,15 +22,16 @@
     "default_popup": "popup.html",
     "default_title": "Amazing Salesforce Chrome Extension"
   },
-  "icons": { "16": "img/icon.png",
-           "48": "img/icon.png",
-          "128": "img/icon.png" 
+  "icons": { 
+    "16": "img/icon.png",
+    "48": "img/icon.png",
+    "128": "img/icon.png" 
   },
   "content_scripts": [
     {
       "run_at": "document_end",
       "matches": ["https://*.force.com/*","https://*.salesforce.com/*"],
-      "all_frames":true,
+      "all_frames":false,
       "js": [
         "libs/content.js"
       ],
@@ -39,15 +40,5 @@
       ]
     }
   ],
-  "options_page": "options.html",
-   "commands": {
-    "_execute_browser_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+K",
-        "mac": "Command+Shift+K",
-        "chromeos": "Ctrl+Shift+K",
-        "linux": "Ctrl+Shift+K"
-      }
-    }
-  }
+  "options_page": "options.html"
 }
