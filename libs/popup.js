@@ -51,12 +51,13 @@ $(function(){
 
 						return $Utils.getUserInfo(token.id, token.access_token, function(err, result){
 							if(err){
-								if(err.status === 401 && attemptNumber === 1){
+								if(err.status === 401 
+									|| err.status === 403){
 									$Utils.doRefreshToken(token.instance_url, 
 										token.refresh_token, 
 										function(errRef, data){
 											if(errRef){
-												return console.log('ERROR OCCURRED while refreshing token: ', errRef);
+												return alert('ERROR OCCURRED while refreshing token: ', errRef);
 											}
 											token = data;
 											return openTabAndLogin(token.instance_url, token.access_token);

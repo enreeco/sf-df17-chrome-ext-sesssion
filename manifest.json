@@ -33,6 +33,8 @@
       "matches": ["https://*.force.com/*","https://*.salesforce.com/*"],
       "all_frames":false,
       "js": [
+        "libs/constants.js",
+        "libs/utils.js",
         "libs/content.js"
       ],
       "css" : [
