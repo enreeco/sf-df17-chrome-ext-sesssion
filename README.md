@@ -1,3 +1,3 @@
 # Amazing Salesforce Chrome Extension
 
-Demo
+Author: [Enrico Murru](https://enree.co)
