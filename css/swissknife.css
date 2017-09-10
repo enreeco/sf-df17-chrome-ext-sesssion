@@ -1,0 +1,18 @@
+.ui-amzext-sort-th{
+    cursor:pointer;
+    color: blue;
+}
+
+.ui-amzext-table-fields{
+    width: 95%;
+}
+
+.ui-amzext-filter-input{
+    width: 250px;
+}
+
+#messageBox{
+    color: red; 
+    font-weight: bold;
+    font-size: 12pt;
+}

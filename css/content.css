@@ -1,0 +1,21 @@
+.ui-amzext-cnt-badge{
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/icon_50x50.png');
+    background-repeat: no-repeat;
+    background-size: 25px;
+    width: 25px;
+    height: 25px;
+    z-index: 999999;
+    position: fixed;
+    left: 60%;
+    top: 0px;
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+
+.ui-amzext-cnt-badge:hover{
+    opacity: 0.9;
+    width: 30px;
+    height: 30px;
+    background-size: 30px;
+}

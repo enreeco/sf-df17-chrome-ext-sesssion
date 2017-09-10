@@ -16,7 +16,11 @@
     "https://*.salesforce.com/*",
     "https://*.force.com/*"
   ],
-  "web_accessible_resources": ["options.html"],
+  "web_accessible_resources": [
+    "options.html",
+    "swissknife.html",
+    "img/*"
+  ],
   "browser_action": {
     "default_icon": "img/icon.png",
     "default_popup": "popup.html",

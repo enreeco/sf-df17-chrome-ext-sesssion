@@ -2,7 +2,10 @@ window.$Utils = window.$Utils || (function(){
     "use strict";
     return {
 
-        //Get a param value from the tab's URL
+        /**
+         * Get a param value from the tab's URL
+         * @name: parameter's name 
+         */
         getURLParameter: function(name) {
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
         },
@@ -152,6 +155,28 @@ window.$Utils = window.$Utils || (function(){
         },
 
         /*
+         * Get current user info
+         * @userUrl: userinfo url (from oauth_object.id)
+         * @accessToken: authentication
+         * @callback: function(@Object(error), @Object(userInfo))
+         */
+        getUserInfo: function(userUrl, accessToken, callback){
+            $.ajax({
+                url: userUrl,
+                method: 'GET',
+                headers:{
+                    'Authorization' : 'Bearer '+accessToken,
+                },
+                success: function(result,status,xhr){
+                    return callback && callback(null, result);
+                },
+                error: function(data){
+                    return callback && callback(data);
+                }
+            });
+        },
+
+        /*
          * Starts OAuth flow to acquire a new refresh token
          * @server: server url (production, test, ...)
          */
@@ -170,12 +195,22 @@ window.$Utils = window.$Utils || (function(){
         },
 
 
-        //Lightning Experience enabled
+        /**
+         * Lightning Experience enabled
+         * @url: url to get the result (if not passed window.location is used)
+         * @return Boolean
+         */
         isLEX: function(url){
             url = url || window.location.href;
             return url.indexOf('/one/one.app') > 0;
         },
 
+        /**
+         * Gets a list of all valid sessions hidden in the browser cookies,
+         * getting all the active ones
+         * @callback: function(mapOfSessions)
+         *             @mapOfSessions: maps OrgId to Session object (contains sid, oid and other info)
+         */
         getAllSessionCookies: function (callback){
             //In LEX mode we can find 2 different sids:
             //- one with domain *.lightning.force.com >> unable to access APIs
@@ -203,7 +238,6 @@ window.$Utils = window.$Utils || (function(){
                         domain: cookieDomain,
                         isMaster: _isMaster,
                         oid: sidCookies[j].value.split('!')[0],
-                        //isLex: false,
                     });
                 }
 
@@ -253,7 +287,6 @@ window.$Utils = window.$Utils || (function(){
                                         && !tmpCookiesMap[tmpCookie.oid].isActive)
                                     ){
                                     tmpCookiesMap[tmpCookie.oid] = tmpCookie;
-                                    console.log(tmpCookie);
                                 }
                             }
 
@@ -287,7 +320,13 @@ window.$Utils = window.$Utils || (function(){
 
         },
 
-        getSFIdFromUrl: function(url, isLex){
+        /**
+         * Parse URL to get the contained object id
+         * @url inspected url
+         * @isLex Boolean
+         * @return null || object id
+         */
+        getSFIdFromSobjectPage: function(url, isLex){
             url = url || '';
             if(!url){
                 throw new Error('Invalid Sobject URL (1)');
@@ -308,6 +347,11 @@ window.$Utils = window.$Utils || (function(){
             }
         },
 
+        /**
+         * Is current page an "sobject" standard page?
+         * @isLex Boolean
+         * @return Boolean
+         */
         checkIfSobjectPage : function(isLex){
             var url = window.location.href;
             if(!url){
@@ -331,8 +375,166 @@ window.$Utils = window.$Utils || (function(){
             }
         },
 
-        isSalesforceId : function (id){
+        /**
+         * RegExp for a valid Salesforce ID
+         * @id  String to be checked against regexp
+         * @return Boolean
+         */
+        isSalesforceId: function (id){
             return /^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$/.test(id||'');
         },
+
+        /**
+         * Gets a Salesforce ID from current page URL
+         * @isLex  Boolean
+         * @return id
+         */
+        getSFIdFromURL: function(isLEX){
+            if($Utils.checkIfSobjectPage(isLEX)){
+                return $Utils.getSFIdFromSobjectPage(window.location.href, isLEX)
+            }else{
+                var pid = $Utils.getURLParameter('id');
+                if($Utils.isSalesforceId(pid)){
+                    return pid;
+                }
+            }
+            return null;
+        },
+
+        /**
+         * Describe Global Salesforce Objects
+         * @serverUrl: API url
+         * @sessionId: valid session id
+         * @callback  function(err, )
+         */
+        describeGlobal: function(serverUrl, sessionId, callback){
+
+            var _url = 'https://'+serverUrl+'/services/data/v'+$Constants.API_LEVEL+'/sobjects/';
+            var _headers = {
+                'Authorization':'Bearer '+sessionId
+            };
+
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                url:_url,
+                headers: _headers,
+                success: function(data, textStatus, request){
+                    return callback && callback(null, data);
+                },
+                error: function (request, textStatus, errorThrown) {
+                    if(request && request.responseText){
+                        return callback && callback(request.responseText);
+                    }
+                    return callback && callback(errorThrown);
+                },
+            });
+        },
+
+        /**
+         * Gets all the fields of a given Sobject
+         * @serverUrl: API url
+         * @sessionId: valid session id
+         * @objectId: object id
+         * @callback: function(error, objectDetails)
+         */
+        getSobject: function(serverUrl, sessionId, objectId, callback){
+            return $Utils.describeGlobal(serverUrl, sessionId, function(err, gDescribe){
+                if(err){
+                    return callback && callback(err);
+                }
+
+
+                var keyPrefix = (objectId || '').substring(0,3);
+                var objectAPIName = null;
+                for(var i = 0; i < gDescribe.sobjects.length; i++){
+                    var descrTmp = gDescribe.sobjects[i];
+                    if(keyPrefix === descrTmp.keyPrefix){
+                        objectAPIName = descrTmp.name;
+                        break;
+                    }
+                }
+                if(!objectAPIName){
+                    return callback && callback('Invalid object: '+keyPrefix+' not found');
+                }
+                var _url = 'https://'+serverUrl + '/services/data/v'
+                    + $Constants.API_LEVEL 
+                    + '/sobjects/'
+                    + objectAPIName
+                    + '/'
+                    + objectId;
+
+                var _headers = {
+                    'Authorization':'Bearer '+sessionId
+                };
+
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    url:_url,
+                    headers: _headers,
+                    success: function(data, textStatus, request){
+                        return callback && callback(null, data);
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        if(request && request.responseText){
+                            return callback && callback(request.responseText);
+                        }
+                        return callback && callback(errorThrown);
+                    },
+                });
+            });
+        },
+
+        /**
+         * Describe a single Sobject to get all fields info
+         * @serverUrl: API url
+         * @sessionId: valid session id
+         * @objectAPIName: object API name
+         * @callback: function(error, objectDescribeDetails)
+         */
+        describeSobject: function(serverUrl, sessionId, objectAPIName, callback){
+
+            var _url = 'https://'
+                + serverUrl
+                + '/services/data/v'
+                + $Constants.API_LEVEL 
+                + '/sobjects/'
+                + objectAPIName
+                + '/describe';
+
+            var _headers = {
+                'Authorization':'Bearer '+sessionId
+            };
+
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                url:_url,
+                headers: _headers,
+                success: function(data, textStatus, request){
+                    return callback && callback(null, data);
+                },
+                error: function (request, textStatus, errorThrown) {
+                   
+                    if(request && request.responseText){
+                        return callback && callback(request.responseText);
+                    }
+                    return callback && callback(errorThrown);
+                },
+            });
+        },
+
+        getSwissKnifeUrl: function(domainAPI, sessionId, objectId){
+            var swissKnifeUrl = chrome.extension.getURL('swissknife.html');
+            swissKnifeUrl += '?surl='
+                + encodeURIComponent(domainAPI)
+                + '&sid='
+                + encodeURIComponent(sessionId)
+                + '&id='
+                + encodeURIComponent(objectId);
+            return swissKnifeUrl;
+        }
+
     };
 })();

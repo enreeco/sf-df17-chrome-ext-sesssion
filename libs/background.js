@@ -3,9 +3,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     if(!sender.tab && request.tab) sender.tab = request.tab;
 
-    if(request.action === 'BKG-GET-ORG-SID'){
+    if(request.action === $Constants.MESSAGES.GET_ORG_ID_BKG){
         
-        return chrome.cookies.getAll({"name":"sid","url":sender.tab.url},function (cookies){
+        return chrome.cookies.getAll({
+            "name":"sid",
+            "url":sender.tab.url},
+            function (cookies){
 
             if(!cookies || !cookies.length || !cookies[0].value) return;
 
@@ -13,7 +16,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
             $Utils.getAllSessionCookies(function(sessions){
                 var message = {
-                    action: "CNT-SET-ORG-SID", 
+                    action: $Constants.MESSAGES.GET_ORG_ID_CNT, 
                     session: sessions[oid] || {},
                     oid: oid,
                     domain: oid.domain,
@@ -23,8 +26,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             });
 
         });
-        
-       
-        
     }
 });

@@ -4,7 +4,7 @@ $(function(){
 	var setMessage = function(message){
 		var messageBox = $('#messageBox');
 		messageBox.html(message);
-	}
+	};
 
 
 	//checks url
