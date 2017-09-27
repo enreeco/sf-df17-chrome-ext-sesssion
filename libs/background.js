@@ -22,9 +22,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     domain: oid.domain,
                 };
 
-                return chrome.tabs.sendMessage(sender.tab.id,message);
+                return sendResponse(message);//chrome.tabs.sendMessage(sender.tab.id,message);
             });
 
         });
+        return true;
     }
 });
