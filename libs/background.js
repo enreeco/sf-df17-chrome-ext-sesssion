@@ -5,7 +5,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     if(request.action === $Constants.MESSAGES.GET_ORG_ID_BKG){
         
-        return chrome.cookies.getAll({
+        chrome.cookies.getAll({
             "name":"sid",
             "url":sender.tab.url},
             function (cookies){
@@ -21,7 +21,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     oid: oid,
                     domain: oid.domain,
                 };
-
                 return sendResponse(message);//chrome.tabs.sendMessage(sender.tab.id,message);
             });
 

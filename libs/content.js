@@ -5,41 +5,12 @@
     //this is the HTML ID that will be used to identify the extensions badge on the page
     //if a valid "sobject id" is found in the URL
     var randomCmpId = (chrome.runtime.id+'_'+Math.random()).replace('.','');
-    console.log(randomCmpId);
+    
     //stores current url: triggers content script only on "url" change
     var _currentUrl = window.location.href;
 
-    //listener to background messages
-    /*chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            if (request.action === $Constants.MESSAGES.GET_ORG_ID_CNT){
-
-                //gets Salesforce Object ID from Page (if any)
-                var objectId = $Utils.getSFIdFromURL(request.session.isLex);
-
-                var appContainer = document.getElementById(randomCmpId);
-
-                if(appContainer){
-                    appContainer.remove();
-                }
-
-                if(!objectId) return;
-                
-                appContainer = document.createElement('div');
-                appContainer.id = randomCmpId;
-                appContainer.title = 'Double click to show all sobject fields';
-                appContainer.className = 'ui-amzext-cnt-badge';
-                window.document.body.appendChild(appContainer);
-
-                appContainer.addEventListener('dblclick', function(evt){
-                    window.open($Utils.getSwissKnifeUrl(request.session.domainAPI,
-                        request.session.sid,
-                        objectId));
-                });
-            }
-    });*/
-
     var responseHandler = function(message){
+
         var objectId = $Utils.getSFIdFromURL(message.session.isLex);
 
         var appContainer = document.getElementById(randomCmpId);
@@ -61,7 +32,7 @@
                 message.session.sid,
                 objectId));
         });
-    }
+    };
 
 
     //first session info request
