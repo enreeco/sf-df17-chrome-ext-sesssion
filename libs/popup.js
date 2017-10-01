@@ -8,17 +8,21 @@ $(function(){
 		params = params || {};
 		params.refresh_tokens = params.refresh_tokens || {};
 		
-		var table = $('<table><thead><th>Name</th><th>User</th><th>Instance URL</th><th/></thead><tbody></tbody></table>');
+		var table = $('<table><thead><th>User</th><th>Instance URL</th><th/></thead><tbody></tbody></table>');
 
 		for(var key in params.refresh_tokens){
+			//gets the instance name
+			var instance = (params.refresh_tokens[key].instance_url) || '';
+			instance = instance.replace('https://','').split('.')[0];
 
 			var tr = $('<tr>'
-					+'<td style="border:1px grey solid;">'
+					+'<td style="border:1px grey solid;"><small>'
 						+(params.refresh_tokens[key].first_name || '') +' '
 						+params.refresh_tokens[key].last_name
+						+'</small><br/>'
+						+'<strong>'+params.refresh_tokens[key].username+'</strong>'
 					+'</td>'
-					+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].username+'</td>'
-					+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].instance_url+'</td>'
+					+'<td style="border:1px grey solid;">'+instance+'</td>'
 					+'<td><button class="btn-login">LOGIN</button></td>'
 				+'</tr>');
 

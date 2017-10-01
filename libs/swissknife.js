@@ -81,6 +81,7 @@ $(function(){
 
         for(var i = 0; i < fieldsArray.length; i++){
             var field = fieldsArray[i];
+            if(field.type === 'address') continue;
             var tr = $('<tr/>');
             tr
                 .attr('data-label', field.label)
@@ -103,6 +104,7 @@ $(function(){
 
                 var a = $('<a/>')
                     .attr('href',swissKnifeUrl)
+                    .attr('target','_blank')
                     .append(pre);
                 tr.append($('<td/>').append(a));
             }else{
