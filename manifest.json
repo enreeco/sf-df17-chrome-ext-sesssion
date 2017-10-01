@@ -3,7 +3,7 @@
   "name": "Amazing Salesforce Chrome Extension",
   "short_name" : "Amazing Salesforce Chrome Extension",
   "description": "This is the most amazing Salesforce Chrome Extension",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "author":{
     "name":"Enrico Murru",
     "url":"http://enree.co"
