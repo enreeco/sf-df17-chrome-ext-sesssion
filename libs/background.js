@@ -1,3 +1,8 @@
+/**
+ * @author Enrico Murru (@enreeco)
+ * @link https://blog.enree.co
+ * @description Plugin's background listener
+ */
 "use strict";
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
@@ -16,12 +21,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
             $Utils.getAllSessionCookies(function(sessions){
                 var message = {
-                    action: $Constants.MESSAGES.GET_ORG_ID_CNT, 
                     session: sessions[oid] || {},
                     oid: oid,
                     domain: oid.domain,
                 };
-                return sendResponse(message);//chrome.tabs.sendMessage(sender.tab.id,message);
+                return sendResponse(message);
             });
 
         });

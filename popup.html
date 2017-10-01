@@ -3,7 +3,27 @@
         <link rel = "stylesheet" type = "text/css" href = "/css/salesforce-lightning-design-system.min.css" />
         <link rel = "stylesheet" type = "text/css" href = "/css/popup.css" />        
 	</head>
-	<body style="margin: 20px; width: 500px; min-height: 450px;">
+	<body style="margin: 20px; width: 500px; min-height: 450px;" class="slds">
+        <div class="slds-page-header">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-default" title="Amazing Salesforce Chrome Extension">
+                <img class="slds-icon slds-page-header__icon" src="img/icon.png" />
+              </span>
+            </div>
+            <div class="slds-media__body">
+              <h1 class="slds-page-header__title slds-truncate slds-align-middle">Amazing Salesforce Chrome Extension</h1>
+            <p class="slds-text-body_small slds-line-height_reset">
+                Login on every ORG.<br/>
+            </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="slds-text-body_small slds-align_absolute-center">
+            Click &nbsp;<a id="options-link" style="cursor: pointer;">here</a> &nbsp;to configure new ORGs.
+        </p>
+
 		<div id="content" />
 		<script src="libs/vendor/jquery.min.js"></script>
         <script src="libs/constants.js"></script>

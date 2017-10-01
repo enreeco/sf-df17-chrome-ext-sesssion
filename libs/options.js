@@ -1,3 +1,8 @@
+/**
+ * @author Enrico Murru (@enreeco)
+ * @link https://blog.enree.co
+ * @description Options page
+ */
 $(function(){
 	"use strict";
 	
@@ -41,25 +46,50 @@ $(function(){
 			chrome.storage.local.get(['refresh_tokens'], function(params){
 				params = params || {};
 				params.refresh_tokens = params.refresh_tokens || {};
-				console.log(params);
-				var table = $('<table style="width: 80%"><thead><th>ORG Id</th><th>User Id</th><th>User</th><th>Instance URL</th><th>Issued At</th><th/></thead><tbody></tbody></table>');
+				var table = $('<table style="width: 80%"><thead><tr>'
+					+'<th scope="col">User</th>'
+					+'<th scope="col">Instance</th>'
+					+'<th scope="col">ORG Id</th>'
+					+'<th scope="col">User Id</th>'
+					+'<th scope="col">Issued At</th>'
+					+'<th scope="col"/>'
+					+'</tr></thead><tbody></tbody></table>');
 
+				table.addClass('slds-table slds-table_cell-buffer slds-table_striped');
+				table.find('tr').addClass('slds-text-title_caps');
+
+				var sorted = [];
 				for(var key in params.refresh_tokens){
+					sorted.push(params.refresh_tokens[key]);
+				}
+				sorted.sort(function(a,b){
+					if(!a) return 1;
+					if(!b) return -1;
+					var a = (a.username || '').toLowerCase();
+					var b = (b.username || '').toLowerCase();
+					if(a < b) return -1;
+					else if(a > b) return 1;
+					return 0;
+				});
 
-					var tr = $('<tr>'
-							+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].orgId+'</td>'
-							+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].userId+'</td>'
-							+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].username+'</td>'
-							+'<td style="border:1px grey solid;">'+params.refresh_tokens[key].instance_url+'</td>'
-							+'<td style="border:1px grey solid;">'+(new Date(parseInt(params.refresh_tokens[key].issued_at))).toISOString()+'</td>'
-							+'<td><button class="btn-uinfo">TEST</button> <button class="btn-refresh">REFRESH</button></td>'
+				for(var i = 0; i < sorted.length; i++){
+					var instance = (sorted[i].instance_url) || '';
+					instance = instance.replace('https://','').split('.')[0];
+					var tr = $('<tr >'
+							+'<td>'+sorted[i].username+'</td>'
+							+'<td>'+instance+'</td>'
+							+'<td>'+sorted[i].orgId+'</td>'
+							+'<td>'+sorted[i].userId+'</td>'
+							+'<td>'+(new Date(parseInt(sorted[i].issued_at))).toISOString()+'</td>'
+							+'<td><button class="btn-uinfo slds-button slds-button_neutral">test</button>'
+							+'<button class="btn-refresh slds-button  slds-button_destructive">refresh</button></td>'
 						+'</tr>');
 
 					table.find('tbody').append(tr);
 
 					tr.find('button.btn-refresh')
-						.attr('data-user-id', params.refresh_tokens[key].userId)
-						.attr('data-org-id', params.refresh_tokens[key].orgId)
+						.attr('data-user-id', sorted[i].userId)
+						.attr('data-org-id', sorted[i].orgId)
 						.click(function(){
 
 							var userId = $(this).attr('data-user-id');
@@ -90,8 +120,8 @@ $(function(){
 						});
 
 					tr.find('button.btn-uinfo')
-						.attr('data-user-id', params.refresh_tokens[key].userId)
-						.attr('data-org-id', params.refresh_tokens[key].orgId)
+						.attr('data-user-id', sorted[i].userId)
+						.attr('data-org-id', sorted[i].orgId)
 						.click(function(){
 
 							var userId = $(this).attr('data-user-id');

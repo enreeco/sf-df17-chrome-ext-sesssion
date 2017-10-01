@@ -1,3 +1,8 @@
+/**
+ * @author Enrico Murru (@enreeco)
+ * @link https://blog.enree.co
+ * @description Swissknife's controller: shows all object fields
+ */
 $(function(){
     "use strict";
     
@@ -19,15 +24,16 @@ $(function(){
         describe.fields.forEach(function (d) { fieldsMap[d.name] = d; });
 
         var table = $('<div>'
-            +'<h2>'+describe.label+' <small>[ ' +describe.name+' ]</small></h2>'
-            +'<h3>ID: <small>'+objectDetails.Id+'</small></h3>'
-            +'<input class="ui-amzext-filter-input" placeholder="Filter columns..."/>'
-            +'<table class="ui-amzext-table-fields"><thead>'
-            +'<th class="ui-amzext-sort-th" data-sort-by="label"><a>Label</a></th>'
-            +'<th class="ui-amzext-sort-th" data-sort-by="name"><a>Name</a></th>'
-            +'<th class="ui-amzext-sort-th" data-sort-by="type"><a>Type</a></th>'
-            +'<th>Value</th>'
-            +'</thead><tbody/></table></div>');
+            +'<div class="slds-text-heading_large">'+describe.label+' <small>[ ' +describe.name+' ]</small></div>'
+            +'<div class="slds-text-heading_medium"><a href="https://'+serverUrl+'/'+objectDetails.Id+'" target="_blank">'+objectDetails.Id+'</a></div>'
+            +'<hr/><input class="ui-amzext-filter-input slds-input" placeholder="Filter columns..."/>'
+            +'<table class="ui-amzext-table-fields slds-table slds-table_cell-buffer slds-table_striped"><thead>'
+            +'<tr class="slds-text-title_caps">'
+            +'<th scope="col" class="ui-amzext-sort-th" data-sort-by="label"><a>Label</a></th>'
+            +'<th scope="col" class="ui-amzext-sort-th" data-sort-by="name"><a>Name</a></th>'
+            +'<th scope="col" class="ui-amzext-sort-th" data-sort-by="type"><a>Type</a></th>'
+            +'<th scope="col">Value</th>'
+            +'</tr></thead><tbody/></table></div>');
         var tbody = table.find('tbody');
 
         table.find('th').each(function(evt){
@@ -127,7 +133,6 @@ $(function(){
             return setMessage(err);
         }
         $Utils.describeSobject(serverUrl, sessionId, details.attributes.type, function(err, describe){
-            console.log(details, describe);
             var table = drawFieldsTable(details, describe);
             $('#content').append(table);
         });

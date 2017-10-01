@@ -1,3 +1,8 @@
+/**
+ * @author Enrico Murru (@enreeco)
+ * @link https://blog.enree.co
+ * @description General Plugin's utilities
+ */
 window.$Utils = window.$Utils || (function(){
     "use strict";
     return {
@@ -40,8 +45,6 @@ window.$Utils = window.$Utils || (function(){
                         'Accept': 'application/json',
                     },
                     success: function(result,status,xhr){
-                        console.log(result);
-                        //result.refresh_token = refToken;
                         result.userId = result.id.split('/')[5];
                         result.orgId = result.id.split('/')[4];
 
@@ -525,6 +528,12 @@ window.$Utils = window.$Utils || (function(){
             });
         },
 
+        /**
+         * Creates the "swissknife" url
+         * @domainAPI: server url
+         * @sessionId: valid session id
+         * @objectId: salesforce object ID
+         */
         getSwissKnifeUrl: function(domainAPI, sessionId, objectId){
             var swissKnifeUrl = chrome.extension.getURL('swissknife.html');
             swissKnifeUrl += '?surl='

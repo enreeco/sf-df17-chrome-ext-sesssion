@@ -1,3 +1,8 @@
+/**
+ * @author Enrico Murru (@enreeco)
+ * @link https://blog.enree.co
+ * @description Popup's controller
+ */
 $(function(){
 	"use strict";
 	
@@ -8,29 +13,50 @@ $(function(){
 		params = params || {};
 		params.refresh_tokens = params.refresh_tokens || {};
 		
-		var table = $('<table><thead><th>User</th><th>Instance URL</th><th/></thead><tbody></tbody></table>');
+		var table = $('<table><thead><tr>'
+			+'<th scope="col">User</th>'
+			+'<th scope="col">Instance URL</th>'
+			+'<th scope="col"/>'
+			+'<tr></thead><tbody></tbody></table>');
+		table.addClass('slds-table slds-table_cell-buffer slds-table_striped');
+		table.find('tr').addClass('slds-text-title_caps');
 
+		var sorted = [];
 		for(var key in params.refresh_tokens){
+			sorted.push(params.refresh_tokens[key]);
+		}
+		sorted.sort(function(a,b){
+			if(!a) return 1;
+			if(!b) return -1;
+			var a = (a.username || '').toLowerCase();
+			var b = (b.username || '').toLowerCase();
+			if(a < b) return -1;
+			else if(a > b) return 1;
+			return 0;
+		});
+
+		for(var i = 0; i < sorted.length; i++){
+
 			//gets the instance name
-			var instance = (params.refresh_tokens[key].instance_url) || '';
+			var instance = (sorted[i].instance_url) || '';
 			instance = instance.replace('https://','').split('.')[0];
 
 			var tr = $('<tr>'
-					+'<td style="border:1px grey solid;"><small>'
-						+(params.refresh_tokens[key].first_name || '') +' '
-						+params.refresh_tokens[key].last_name
+					+'<td ><small>'
+						+(sorted[i].first_name || '') +' '
+						+sorted[i].last_name
 						+'</small><br/>'
-						+'<strong>'+params.refresh_tokens[key].username+'</strong>'
+						+'<strong>'+sorted[i].username+'</strong>'
 					+'</td>'
-					+'<td style="border:1px grey solid;">'+instance+'</td>'
-					+'<td><button class="btn-login">LOGIN</button></td>'
+					+'<td >'+instance+'</td>'
+					+'<td><button class="btn-login slds-button slds-button_neutral">login</button></td>'
 				+'</tr>');
 
 			table.find('tbody').append(tr);
 
 			tr.find('button.btn-login')
-				.attr('data-user-id', params.refresh_tokens[key].userId)
-				.attr('data-org-id', params.refresh_tokens[key].orgId)
+				.attr('data-user-id', sorted[i].userId)
+				.attr('data-org-id', sorted[i].orgId)
 				.click(function(){
 
 					var userId = $(this).attr('data-user-id');
@@ -79,6 +105,16 @@ $(function(){
 		}
 
 		content.append(table);
+
+		$('#options-link').click(function() {
+			if (chrome.runtime.openOptionsPage) {
+				// New way to open options pages, if supported (Chrome 42+).
+				chrome.runtime.openOptionsPage();
+			} else {
+				// Reasonable fallback.
+				window.open(chrome.runtime.getURL('options.html'));
+			}
+		});
 	});
 
 });

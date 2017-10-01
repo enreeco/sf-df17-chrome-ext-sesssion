@@ -3,12 +3,54 @@
 		<link rel = "stylesheet" type = "text/css" href = "/css/salesforce-lightning-design-system.min.css" />
         <link rel = "stylesheet" type = "text/css" href = "/css/options.css" />
 	</head>
-	<body style="margin: 20px; ">
-		<select id="server">
-			<option value="0">Production / Developer</option>
-			<option value="1">Sandbox</option>
-		</select>
-		<button id="btnLogin">Add another user</button>
+	<body style="margin: 20px; " class="slds">
+		<div class="slds-page-header">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-default" title="Amazing Salesforce Chrome Extension">
+                <img class="slds-icon slds-page-header__icon" src="img/icon.png" />
+              </span>
+            </div>
+            <div class="slds-media__body">
+              <h1 class="slds-page-header__title slds-truncate slds-align-middle">Amazing Salesforce Chrome Extension</h1>
+            <p class="slds-text-body_small slds-line-height_reset">
+                Configure ORGs.<br/>
+            </p>
+            </div>
+          </div>
+        </div>
+        <hr/>
+        <p class="slds-text-body_small">
+        	Choose your ORG type and authorize <strong>Amazing Salesforce Chrome Extension</strong>	app.
+        </p>
+
+        <div class="slds-form slds-form_compound">
+    		<fieldset class="slds-form-element">
+				<div class="slds-form-element__group">
+			        <div class="slds-form-element__row">
+			          	<div class="slds-form-element slds-size_1-of-6">
+							<label class="slds-form-element__label" >Login type</label>
+							<div class="slds-form-element__control">
+								<div class="slds-select_container">
+									<select class="slds-select" id="server">
+										<option value="0">Production / Developer</option>
+										<option value="1">Sandbox</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="slds-form-element slds-size_1-of-6">
+							<label class="slds-form-element__label" >&nbsp;</label>
+							<div class="slds-form-element__control">
+								<button class="slds-button slds-button_brand" id="btnLogin">Add another user</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<hr/>
+		
 		<div id="content" ></div>
 		<pre id="messageBox"></pre>
 		<script src="libs/vendor/jquery.min.js"></script>
