@@ -158,28 +158,6 @@ window.$Utils = window.$Utils || (function(){
         },
 
         /*
-         * Get current user info
-         * @userUrl: userinfo url (from oauth_object.id)
-         * @accessToken: authentication
-         * @callback: function(@Object(error), @Object(userInfo))
-         */
-        getUserInfo: function(userUrl, accessToken, callback){
-            $.ajax({
-                url: userUrl,
-                method: 'GET',
-                headers:{
-                    'Authorization' : 'Bearer '+accessToken,
-                },
-                success: function(result,status,xhr){
-                    return callback && callback(null, result);
-                },
-                error: function(data){
-                    return callback && callback(data);
-                }
-            });
-        },
-
-        /*
          * Starts OAuth flow to acquire a new refresh token
          * @server: server url (production, test, ...)
          */
