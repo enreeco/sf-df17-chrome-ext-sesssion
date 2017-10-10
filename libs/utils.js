@@ -36,7 +36,7 @@ window.$Utils = window.$Utils || (function(){
                 var body = ('grant_type=authorization_code&client_id='+encodeURIComponent($Constants.CLIENT_ID)
                         +'&redirect_uri='+encodeURIComponent('chrome-extension://'+chrome.runtime.id+'/options.html')
                         +'&code='+encodeURIComponent(code));
-                console.log(url, body);
+                
                 return $.ajax({
                     url: url,
                     method: 'POST',
@@ -165,13 +165,18 @@ window.$Utils = window.$Utils || (function(){
             var scopes = ['web','api','refresh_token'];
             //User Agent Flow
             var url = server+'/services/oauth2/authorize?response_type=code'
-                    +'&client_id='+$Constants.CLIENT_ID
-                    +'&state='+encodeURIComponent(server)
+                    +'&client_id='
+                        +$Constants.CLIENT_ID
+                    +'&state='
+                        +encodeURIComponent(server)
                     //only for web server
                     +'&immediate=false'
                     +'&prompt=login'
-                    +'&redirect_uri='+encodeURIComponent('chrome-extension://'+chrome.runtime.id+'/options.html')
-                    +'&scope='+scopes.join('%20')+'&display=popup';
+                    +'&redirect_uri='
+                        +encodeURIComponent('chrome-extension://'+chrome.runtime.id+'/options.html')
+                    +'&scope='
+                        +scopes.join('%20')
+                    +'&display=popup';
             window.location.href = url;
         },
 
