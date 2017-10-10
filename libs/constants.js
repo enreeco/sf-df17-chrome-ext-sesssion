@@ -10,7 +10,6 @@ window.$Constants = window.$Constants || (function(){
             GET_ORG_ID_BKG: 'BKG-GET-ORG-SID',
         },
         API_LEVEL: '40.0',
-        //CLIENT_ID: '3MVG9HxRZv05HarSpKLUXc5SQ3BzfEXx6Z3RBWxt__OGSdojuqsg5TEoAqJgwkKguUoWdlYNMydnz6hHx3cJA',
-        CLIENT_ID: '3MVG9HxRZv05HarSpKLUXc5SQ3Ee.lRGqW8jFPJNNewKd9NsucYwNuSh8De037ITuVaIxZqna6.WpRxxQkqTZ',
+        CLIENT_ID: '@REPLACE_WITH_VALID_CONSUMER_KEY_FROM_CONNECTED_APP',
     };
 })();
