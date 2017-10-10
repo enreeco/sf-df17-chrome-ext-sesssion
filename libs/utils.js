@@ -23,7 +23,7 @@ window.$Utils = window.$Utils || (function(){
          * Connected app is configured not to use the "CLIENT_SECRET" (see "Require Secret for Web Server Flow" option)
          * @callback: function(@Boolean(isOauth), @Object(OauthData))
          *            @isOauth: TRUE if the url contains OAuth data
-         *            @OauthData: object containing OAuth info (success) or OAuth error details
+         *            @OauthData: object containing OAuth error details
          */
         parseOAuthPageUrlWebServerFlow: function(callback){
             var pageUrl = window.location.href;
