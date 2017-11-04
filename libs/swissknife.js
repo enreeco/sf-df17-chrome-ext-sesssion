@@ -6,17 +6,21 @@
 $(function(){
     "use strict";
     
+    //messages on a specific message box
     var setMessage = function(message){
         var messageBox = $('#messageBox');
         messageBox.html(message+'');
     };
 
+    //parameters from page url
     var sessionId = $Utils.getURLParameter('sid');
     var objectId = $Utils.getURLParameter('id');
     var serverUrl = $Utils.getURLParameter('surl');
 
+    //current sorting field on the table
     var _sortField = 'label';
 
+    //draws the table with all object fields
     var drawFieldsTable = function(objectDetails, describe){
 
 
@@ -49,7 +53,7 @@ $(function(){
 
         });
 
-        //filter input
+        //filter input (quick search)
         table
             .find('input.ui-amzext-filter-input')
             .on('keyup', function(){
@@ -85,6 +89,7 @@ $(function(){
             return 0;
         });
 
+        //creates all the rows
         for(var i = 0; i < fieldsArray.length; i++){
             var field = fieldsArray[i];
             if(field.type === 'address') continue;
@@ -128,6 +133,8 @@ $(function(){
         return setMessage('Invalid "sid" and/or "id" and or "surl" parameters. Retry.');
     }
 
+    //gets all object fields with REST call
+    //then describes it
     $Utils.getSobject(serverUrl, sessionId, objectId, function(err, details){
         if(err){
             return setMessage(err);

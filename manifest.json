@@ -17,7 +17,6 @@
     "https://*.force.com/*"
   ],
   "web_accessible_resources": [
-    "options.html",
     "swissknife.html",
     "img/*"
   ],

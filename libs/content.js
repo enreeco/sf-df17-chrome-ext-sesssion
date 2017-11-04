@@ -14,8 +14,10 @@
     //stores current url: triggers content script only on "url" change
     var _currentUrl = window.location.href;
 
+    //handler for the response to background message (to get a session id)
     var responseHandler = function(message){
 
+        //gets an object id from page url (if any)
         var objectId = $Utils.getSFIdFromURL(message.session.isLex);
 
         var appContainer = document.getElementById(randomCmpId);

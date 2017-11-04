@@ -21,6 +21,7 @@ $(function(){
 		table.addClass('slds-table slds-table_cell-buffer slds-table_striped');
 		table.find('tr').addClass('slds-text-title_caps');
 
+		//sort refresh tokens by username
 		var sorted = [];
 		for(var key in params.refresh_tokens){
 			sorted.push(params.refresh_tokens[key]);
@@ -35,6 +36,7 @@ $(function(){
 			return 0;
 		});
 
+		//creates a row for each stored token
 		for(var i = 0; i < sorted.length; i++){
 
 			//gets the instance name
@@ -54,6 +56,7 @@ $(function(){
 
 			table.find('tbody').append(tr);
 
+			//login button handler
 			tr.find('button.btn-login')
 				.attr('data-user-id', sorted[i].userId)
 				.attr('data-org-id', sorted[i].orgId)
@@ -74,15 +77,21 @@ $(function(){
 							return alert('Tokens not found');
 						}
 
+						//redirect to salesforce session id confirmation page
 						function openTabAndLogin(url, sid){
 							var loginUrl = url+'/secur/frontdoor.jsp?sid='+sid;
 							chrome.tabs.create({ url: loginUrl });
 						};
 
+						//uses the "getUserInfo" call to understand if
+						//a session token is still valid
 						return $Utils.getUserInfo(token.id, token.access_token, function(err, result){
 							if(err){
+								//session token is not valid => needs refresh
 								if(err.status === 401 
 									|| err.status === 403){
+
+									//tries the refresh token call
 									$Utils.doRefreshToken(token.instance_url, 
 										token.refresh_token, 
 										function(errRef, data){
@@ -90,12 +99,14 @@ $(function(){
 												return alert('ERROR OCCURRED while refreshing token: ', errRef);
 											}
 											token = data;
+											//confirm session token on Salesforce
 											return openTabAndLogin(token.instance_url, token.access_token);
 										});
 									return;
 								}
 								return;
 							}
+							//confirm session token on Salesforce
 							return openTabAndLogin(token.instance_url, token.access_token);
 						});
 
@@ -106,7 +117,9 @@ $(function(){
 
 		content.append(table);
 
+		//redirects to options page to configure more tokens 
 		$('#options-link').click(function() {
+			//this function is not available on Chrome < 42
 			if (chrome.runtime.openOptionsPage) {
 				// New way to open options pages, if supported (Chrome 42+).
 				chrome.runtime.openOptionsPage();

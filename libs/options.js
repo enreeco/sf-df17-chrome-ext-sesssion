@@ -58,6 +58,7 @@ $(function(){
 				table.addClass('slds-table slds-table_cell-buffer slds-table_striped');
 				table.find('tr').addClass('slds-text-title_caps');
 
+				//sorts stored tokens by username
 				var sorted = [];
 				for(var key in params.refresh_tokens){
 					sorted.push(params.refresh_tokens[key]);
@@ -72,6 +73,7 @@ $(function(){
 					return 0;
 				});
 
+				//creates a new row for each token stored
 				for(var i = 0; i < sorted.length; i++){
 					var instance = (sorted[i].instance_url) || '';
 					instance = instance.replace('https://','').split('.')[0];
@@ -87,6 +89,7 @@ $(function(){
 
 					table.find('tbody').append(tr);
 
+					//refresh token handler
 					tr.find('button.btn-refresh')
 						.attr('data-user-id', sorted[i].userId)
 						.attr('data-org-id', sorted[i].orgId)
@@ -119,6 +122,7 @@ $(function(){
 							});
 						});
 
+					//test connection button
 					tr.find('button.btn-uinfo')
 						.attr('data-user-id', sorted[i].userId)
 						.attr('data-org-id', sorted[i].orgId)
@@ -140,6 +144,7 @@ $(function(){
 									return alert('Tokens not found');
 								}
 
+								//does a "getUserInfo" call
 								return $Utils.getUserInfo(token.id, token.access_token, function(err, result){
 									if(err){
 										return setMessage('ERROR OCCURRED:'+JSON.stringify(err,null,2));
