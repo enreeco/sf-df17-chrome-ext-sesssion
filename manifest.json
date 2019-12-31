@@ -18,6 +18,7 @@
   ],
   "web_accessible_resources": [
     "swissknife.html",
+    "options.html",
     "img/*"
   ],
   "browser_action": {
